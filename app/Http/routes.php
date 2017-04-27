@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
  * Вывести панель с задачами
  */
 Route::get('/', function () {
-    return view('tasks');
+    //получ все из базы
+    $tasks = Task::orderBy('created_at', 'asc')->get();
+
+    return view('tasks', [
+	'tasks' => $tasks,
+	'title' => 'All tasks',
+    ]);
 });
 
 /**
@@ -22,12 +28,12 @@ Route::post('/task', function (Request $request) {
 			->withInput()
 			->withErrors($validator);
     }
-    $task=new Task();
-    $task->name=$request->name;
+    $task = new Task();
+    $task->name = $request->name;
     $task->save();
     return redirect('/');
     //echo $request->name;
-    //
+//
 });
 
 /**
